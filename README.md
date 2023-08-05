@@ -91,7 +91,7 @@ Engine Code:
 Rei Anderson
 
 This engine uses:
-[GLM](https://github.com/g-truc/glm) - For mathmatic types
-[GLFW](https://github.com/glfw/glfw) - For window creation and input processing
-[glad](https://github.com/Dav1dde/glad) - For opengl function loading
+[GLM](https://github.com/g-truc/glm) - For mathmatic types  
+[GLFW](https://github.com/glfw/glfw) - For window creation and input processing  
+[glad](https://github.com/Dav1dde/glad) - For opengl function loading  
 
