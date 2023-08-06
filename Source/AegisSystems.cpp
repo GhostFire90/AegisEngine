@@ -6,6 +6,7 @@
 #include <iostream>
 #include "SceneSystem.h"
 #include "BaseSystem.h"
+#include <algorithm>
 
 
 

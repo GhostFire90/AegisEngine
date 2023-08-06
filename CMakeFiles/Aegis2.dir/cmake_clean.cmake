@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/Aegis2.dir/Source/AegisObject.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/AegisObject.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/AegisSystems.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/AegisSystems.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/BaseSystem.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/BaseSystem.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/CameraComponent.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/CameraComponent.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Component.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Component.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Material.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Material.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Mesh.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Mesh.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/MeshRenderer.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/MeshRenderer.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/ObjectManager.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/ObjectManager.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Scene.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Scene.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/SceneSystem.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/SceneSystem.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Shader.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Shader.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/ShaderSource.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/ShaderSource.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Texture.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Texture.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/Transform.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/Transform.cpp.o.d"
+  "CMakeFiles/Aegis2.dir/Source/glad.c.o"
+  "CMakeFiles/Aegis2.dir/Source/glad.c.o.d"
+  "CMakeFiles/Aegis2.dir/Source/obj_loader.cpp.o"
+  "CMakeFiles/Aegis2.dir/Source/obj_loader.cpp.o.d"
+  "libAegis2.pdb"
+  "libAegis2.so"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C CXX)
+  include(CMakeFiles/Aegis2.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

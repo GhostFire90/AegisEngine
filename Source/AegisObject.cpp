@@ -1,5 +1,6 @@
 #include "AegisObject.h"
 #include "Component.h"
+#include <algorithm>
 
 namespace Aegis {
 	AegisObject::AegisObject(const char* _name, AegisObject* _parent) : parent(_parent), isDestroyed(false), destroyOnLoad(true)

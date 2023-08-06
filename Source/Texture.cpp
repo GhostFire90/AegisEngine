@@ -12,7 +12,11 @@ namespace Aegis {
 		data = stbi_load(path, &dims.x, &dims.y, &channels, 0);
 		if (!data) {
 			char errstr[512];
-			strerror_s(errstr, 512, errno);
+			#ifdef _MSC_VER
+				strerror_s(errstr, 512, errno);
+			#else
+				strerror_r(errno, errstr, 512);
+			#endif
 			std::cerr << "Failed to load file " << path << ": " << errstr << '\n';
 		}
 	}

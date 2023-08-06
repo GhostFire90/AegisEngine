@@ -5,6 +5,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
+#include <string.h>
 using namespace glm;
 namespace Aegis {
 	namespace obj_loading {
@@ -25,7 +26,11 @@ namespace Aegis {
 			file = std::ifstream(path);
 			if (file.fail()) {
 				char buf[512];
+				#ifdef _MSC_VER
 				strerror_s(buf, 512, errno);
+				#else
+				strerror_r(errno, buf, 512);
+				#endif
 				std::cout << "File open failed: " << buf << '\n';
 			}
 		}

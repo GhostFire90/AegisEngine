@@ -1,0 +1,3 @@
+/home/Rei/git_repos/AegisEngine/CMakeFiles/Aegis2.dir
+/home/Rei/git_repos/AegisEngine/CMakeFiles/edit_cache.dir
+/home/Rei/git_repos/AegisEngine/CMakeFiles/rebuild_cache.dir

@@ -36,4 +36,8 @@ target_sources(Aegis2
 )
 target_include_directories(Aegis2 PUBLIC inc)
 target_link_directories(Aegis2 PUBLIC lib)
-target_link_libraries(Aegis2 PUBLIC GLFW/glfw3 opengl32)
+
+message("${CMAKE_SOURCE_DIR}/lib")
+
+
+target_link_libraries(Aegis2 PUBLIC glfw GL)
