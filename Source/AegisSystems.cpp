@@ -11,6 +11,7 @@
 
 
 
+
 namespace Aegis {
 	AegisSystems* AegisSystems::as = nullptr;
 	glm::vec3* AegisSystems::clearColor;

@@ -1,5 +1,5 @@
 #pragma once
-#include <glfw3.h>
+
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
@@ -23,6 +23,8 @@
 #else
 #define AEGIS_API IMPORT
 #endif // !AEGIS_DLL_BUILD
+
+struct GLFWwindow;
 
 namespace Aegis {
 	class BaseSystem;
