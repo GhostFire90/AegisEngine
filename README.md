@@ -5,7 +5,7 @@ Aegis Engine is a personal project that I decided to undertake that by no means 
 
 ## Usage
 
-Aegis is a C++ only library that uses [GLM](https://github.com/g-truc/glm) for its mathematical types so it is recommended to include those in your projects as well.
+Aegis is a C++ only library that uses [GLM](https://github.com/g-truc/glm) for its mathematical types so it is required to include those in your projects as well.
 
 ### Getting a window displayed 
 First things first, we should at least get the window running.
