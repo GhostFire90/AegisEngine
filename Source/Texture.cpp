@@ -12,7 +12,7 @@ namespace Aegis {
 		data = stbi_load(path, &dims.x, &dims.y, &channels, 0);
 		if (!data) {
 			char errstr[512];
-			#ifdef _MSC_VER
+			#ifdef _WIN32
 				strerror_s(errstr, 512, errno);
 			#else
 				strerror_r(errno, errstr, 512);

@@ -35,9 +35,14 @@ target_sources(Aegis2
     Source/glad.c
 )
 target_include_directories(Aegis2 PUBLIC inc)
-target_link_directories(Aegis2 PUBLIC lib)
+
 
 message("${CMAKE_SOURCE_DIR}/lib")
 
-
-target_link_libraries(Aegis2 PUBLIC glfw GL)
+if(WIN32)
+target_link_directories(Aegis2 PUBLIC lib)
+target_link_libraries(Aegis2 PUBLIC opengl32 glfw3)
+endif()
+if(UNIX)
+target_link_libraries(Aegis2 PUBLIC GL glfw)
+endif()

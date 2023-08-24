@@ -26,9 +26,9 @@ namespace Aegis {
 			file = std::ifstream(path);
 			if (file.fail()) {
 				char buf[512];
-				#ifdef _MSC_VER
+				#ifdef _WIN32
 				strerror_s(buf, 512, errno);
-				#else
+				#elif defined(__GNUC__)
 				strerror_r(errno, buf, 512);
 				#endif
 				std::cout << "File open failed: " << buf << '\n';
