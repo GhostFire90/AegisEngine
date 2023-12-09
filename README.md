@@ -15,7 +15,7 @@ First things first, we should at least get the window running.
 using namespace Aegis;
 
 int main(void){
-  auto as = AegisSystems(800,800); //initialize aegis systems with the width and height of 800
+  AegisSystems::Initialize(800,800, "my first window"); //initialize aegis systems with the width and height of 800 and a title of my first window
   AegisSystems::Aegis_BeginLoop(); // Everything after this call is out of your hands as by the time the loop ends, aegis will have exited and dealoccated all of its memory
 
 
@@ -37,7 +37,7 @@ for single scene and static objects we could just add the ObjectManager system
 using namespace Aegis;
 
 int main(void){
-  auto as = AegisSystems(800,800); //initialize aegis systems with the width and height of 800
+  AegisSystems::Initialize(800,800, "my first window"); //initialize aegis systems with the width and height of 800 and a title of my first window
   
   auto objManager = new ObjectManager();      //create a manager and track it so we can add objects to it
   AegisSystems::Aegis_AddSystem(objManager);  //Add it to aegis so it will be updated every frame
@@ -67,7 +67,7 @@ SceneSystem is another system that comes with Aegis, it mannages all scene/level
 using namespace Aegis;
 
 int main(void){
-  auto as = AegisSystems(800,800); //initialize aegis systems with the width and height of 800
+  AegisSystems::Initialize(800,800, "my first window"); //initialize aegis systems with the width and height of 800 and a title of my first window
   
   auto objManager = new ObjectManager();      //create a manager and track it so we can add objects to it
   AegisSystems::Aegis_AddSystem(objManager);  //Add it to aegis so it will be updated every frame
