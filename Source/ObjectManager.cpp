@@ -41,10 +41,7 @@ namespace Aegis {
 		activeCam = camera;
 	}
 
-	CameraComponent* ObjectManager::GetActiveCamera() const
-	{
-		return activeCam;
-	}
+	
 
 	void ObjectManager::ClearManager()
 	{
@@ -61,7 +58,7 @@ namespace Aegis {
 
 	ObjectManager* ObjectManager::GetObjectManager()
 	{
-		ObjectManager* man = (ObjectManager*)AegisSystems::GetAegisSystems()->Aegis_GetSystem("ObjectManager");
+		ObjectManager* man = (ObjectManager*)AegisSystems::GetAegisSystems()->GetSystem("ObjectManager");
 		if (man != nullptr) {
 			return man;
 		}

@@ -13,50 +13,66 @@
 
 
 namespace Aegis {
-	AegisSystems* AegisSystems::as = nullptr;
+	AegisSystems* as = nullptr;
 	glm::vec3* AegisSystems::clearColor;
-	std::map<int, KeyState>* AegisSystems::keyStates;
+	std::unordered_map<int, bool> repeat_keys;
 	glm::vec2* AegisSystems::mousePosition;
 	GLFWwindow* AegisSystems::window;
 	std::vector<BaseSystem*>* AegisSystems::systems;
+	glm::vec2* AegisSystems::window_dimensions;
+
+	glm::vec2 windowed_dimensions;
+
+	std::unordered_map<int, bool> triggeredKeys;
+	std::unordered_map<int, bool> releasedKeys;
+
 
 	void inputCallback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-		auto itr = AegisSystems::keyStates->find(key);
-		if (itr == AegisSystems::keyStates->end()) {
-			itr = AegisSystems::keyStates->insert(std::make_pair(key, KeyState(false, false))).first;
+		
+		triggeredKeys[key] = false;
+		releasedKeys[key] = false;
+		if (action == GLFW_PRESS) {
+			if (!(repeat_keys)[key]) {
+				
+				triggeredKeys[key] = true;
+				//std::cout << "Repeating: " << repeat_keys[key] << " Triggered:" << triggeredKeys[key] << "\n";
+			}
+				
+			//releasedKeys[key] = false;
+			(repeat_keys)[key] = true;
 		}
-		KeyState state = (*itr).second;
-		switch (action) {
-		case GLFW_PRESS:
-			state.currentFrame = true;
-			state.lastFrame = false;
-			break;
-		case GLFW_REPEAT:
-			state.currentFrame = true;
-			state.lastFrame = true;
-			break;
-		case GLFW_RELEASE:
-			state.currentFrame = false;
-			state.lastFrame = true;
-			break;
-		default:
-			break;
+		if (action == GLFW_RELEASE){
+			//triggeredKeys[key] = false;
+			releasedKeys[key] = true;
+			(repeat_keys)[key] = false;
 		}
-		(*itr).second = state;
 		
 	}
-	KeyState::KeyState(bool last, bool current)
+
+	void AegisSystems::GetWindowDimensions(int* width, int* height)
 	{
-		lastFrame = last;
-		currentFrame = current;
+		glm::i32vec2 windim;
+		glfwGetWindowSize(AegisSystems::GetAegisSystems()->GetWindow(), &windim.x, &windim.y);
+		*width = windim.x;
+		*height = windim.y;
 	}
+
+	void sizeCallback(GLFWwindow* win, int, int) {
+
+		
+	}
+
+
 	void mouseCallback(GLFWwindow* w, double x, double y) {
 		*AegisSystems::mousePosition = glm::vec2(x, y);
 	}
 
+	void AegisSystems::Initialize(int width, int height, std::string title)
+	{
+		as = new AegisSystems(width, height, title);
+	}
 
-
-	AegisSystems::AegisSystems(unsigned int width, unsigned int height)
+	AegisSystems::AegisSystems(unsigned int width, unsigned int height, std::string name)
 	{
 		if (as != nullptr) {
 			return;
@@ -68,15 +84,22 @@ namespace Aegis {
 			throw std::string("Failed to initialize Aegis");
 		}
 		glEnable(GL_DEPTH_TEST);
-		AegisSystems::as = this;
+		
 		glfwSetKeyCallback(window, inputCallback);
 		glfwSetCursorPosCallback(window, mouseCallback);
+
+		window_dimensions = new glm::vec2(width, height);
+		windowed_dimensions = *window_dimensions;
 
 		clearColor = new glm::vec3();
 		systems = new std::vector<BaseSystem*>;
 		mousePosition = new glm::vec2();
 
-		keyStates = new std::map<int, KeyState>;
+		
+
+
+		
+		SetWindowName(name);
 		
 	}
 
@@ -111,11 +134,11 @@ namespace Aegis {
 	int AegisSystems::Aegis_SetupWindow(unsigned width, unsigned height)
 	{
 
-		window = glfwCreateWindow(height, width, "Woo Aegis", nullptr, nullptr);
+		window = glfwCreateWindow(width, height, "", nullptr, nullptr);
 
 		if (!window) {
 			std::cout << "Failed to create window\n";
-			Aegis_Exit();
+			Exit();
 			return -1;
 		}
 
@@ -123,7 +146,7 @@ namespace Aegis {
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			std::cout << "Failed to initialize GLAD\n";
-			Aegis_Exit();
+			Exit();
 			return -1;
 		}
 
@@ -131,7 +154,7 @@ namespace Aegis {
 		return 0;
 	}
 
-	void AegisSystems::Aegis_BeginLoop(void)
+	void AegisSystems::BeginLoop(void)
 	{
 		float oldTime;
 		float time = 0;
@@ -142,12 +165,12 @@ namespace Aegis {
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 			if (GetKeyTriggered(GLFW_KEY_ESCAPE)) {
-				SceneSystem* scenesys = (SceneSystem*)as->Aegis_GetSystem("SceneSystem");
+				SceneSystem* scenesys = (SceneSystem*)as->GetSystem("SceneSystem");
 				if (scenesys != nullptr) {
 					scenesys->SetNextScene(nullptr);
 				}
 				else {
-					Aegis_Exit();
+					Exit();
 				}
 				
 				//break;
@@ -159,7 +182,6 @@ namespace Aegis {
 			dt = time - oldTime;
 			
 
-
 			glClearColor(clearColor->r, clearColor->g, clearColor->b, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -167,25 +189,25 @@ namespace Aegis {
 				(*itr)->Update(dt);
 			}
 			
-
-			for (auto itr = keyStates->begin(); itr != keyStates->end(); itr++) {
-				(*itr).second.lastFrame = false;
-				(*itr).second.currentFrame = false;
-			}
-
+			
+			triggeredKeys.clear();
+			releasedKeys.clear();
+			
 			glfwSwapBuffers(window);
 			
 		}
 		delete clearColor;
-		delete keyStates;
+
 		delete systems;
 		delete mousePosition;
+		delete window_dimensions;
 		glfwDestroyWindow(window);
 		glfwTerminate();
+		delete as;
 		
 	}
 
-	void AegisSystems::Aegis_Exit(void) {
+	void AegisSystems::Exit(void) {
 		std::cout << "Exiting Aegis\n";
 		glfwSetWindowShouldClose(window, 1);
 		for (auto itr = systems->begin(); itr != systems->end(); itr++) {
@@ -199,17 +221,59 @@ namespace Aegis {
 		return;
 	}
 
-	void AegisSystems::Aegis_SetClearColor(glm::vec3 color)
+	void AegisSystems::SetWindowMode(WindowMode mode)
+	{
+		GLFWmonitor* m = glfwGetPrimaryMonitor();
+		const GLFWvidmode* vm = glfwGetVideoMode(m);
+		switch (mode)
+		{
+		case Aegis::WindowMode::Windowed:
+			glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
+			glfwSetWindowAttrib(window, GLFW_FLOATING, GLFW_FALSE);
+			
+			*window_dimensions = windowed_dimensions;
+			glfwSetWindowSize(window, window_dimensions->x, window_dimensions->y);
+			break;
+		case Aegis::WindowMode::Borderless:
+		{
+			glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+			//glfwSetWindowMonitor(window, nullptr, 0, 0, vm->width, vm->height, 60);	
+			glfwSetWindowSize(window, vm->width, vm->height);
+			glfwSetWindowPos(window, 0, 0);
+			window_dimensions->x = vm->width;
+			window_dimensions->y = vm->height;
+
+		}
+			break;
+		case Aegis::WindowMode::Fullscreen:
+		{
+			glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+			glfwSetWindowAttrib(window, GLFW_FLOATING, GLFW_FALSE);
+			glfwSetWindowMonitor(window, m, 0, 0, vm->width, vm->height, vm->refreshRate);
+			window_dimensions->x = vm->width;
+			window_dimensions->y = vm->height;
+
+		}
+			break;
+		default:
+			break;
+		}
+		int width, height;
+		glfwGetFramebufferSize(window, &width, &height);
+		glViewport(0, 0, width, height);
+	}
+
+	void AegisSystems::SetClearColor(glm::vec3 color)
 	{
 		*clearColor = color;
 	}
 
-	void AegisSystems::Aegis_AddSystem(BaseSystem* system)
+	void AegisSystems::AddSystem(BaseSystem* system)
 	{
 		systems->push_back(system);
 	}
 
-	Aegis::BaseSystem* AegisSystems::Aegis_GetSystem(std::string name)
+	Aegis::BaseSystem* AegisSystems::GetSystem(std::string name)
 	{
 		auto itr = std::find_if(systems->begin(), systems->end(), [name](BaseSystem* sys) {
 			return name.compare(sys->GetName()) == 0;
@@ -226,7 +290,7 @@ namespace Aegis {
 	}
 	AegisSystems* AegisSystems::GetAegisSystems()
 	{
-		return AegisSystems::as;
+		return as;
 	}
 	float AegisSystems::GetTime()
 	{
@@ -234,32 +298,39 @@ namespace Aegis {
 	}
 	bool AegisSystems::GetKey(int key)
 	{
-		auto itr = AegisSystems::keyStates->find(key);
-		if (itr != AegisSystems::keyStates->end())
-			return (*itr).second.currentFrame;
-		else
-			return false;
+		return (repeat_keys)[key];
 	}
 	bool AegisSystems::GetKeyTriggered(int key)
 	{
-		auto itr = AegisSystems::keyStates->find(key);
-		if (itr != AegisSystems::keyStates->end())
-			return (*itr).second.currentFrame && !(*itr).second.lastFrame;
-		else
-			return false;
+		auto stat = glfwGetKey(window, key);
+
+		if (triggeredKeys[key]) {
+			//std::cout << "Triggered\n";
+			
+			return true;
+		}
+
+		return false;
+		
 	}
 	bool AegisSystems::GetKeyReleased(int key)
 	{
-		auto itr = AegisSystems::keyStates->find(key);
-		if (itr != AegisSystems::keyStates->end())
-			return (*itr).second.lastFrame && !(*itr).second.currentFrame;
-		else
-			return false;
+		if (releasedKeys[key]) {
+			
+			return true;
+		}
+		return false;
 	}
 	const glm::vec2* AegisSystems::GetMousePosition()
 	{
 		return mousePosition;
 	}
+	void AegisSystems::SetWindowName(std::string name)
+	{
+		glfwSetWindowTitle(window, name.c_str());
+	}
+	
+	
 }
 
 

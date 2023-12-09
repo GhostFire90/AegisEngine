@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 
 #ifdef _MSC_VER
@@ -28,25 +28,27 @@ struct GLFWwindow;
 
 namespace Aegis {
 	class BaseSystem;
-	struct KeyState {
-		KeyState(bool, bool);
-		bool lastFrame;
-		bool currentFrame;
+	
+
+	enum class AEGIS_API WindowMode {
+		Windowed,
+		Borderless,
+		Fullscreen
 	};
 
 	class AEGIS_API AegisSystems {
 	public:
-		AegisSystems(unsigned int width, unsigned int height);
+		
 		~AegisSystems();		
 
-		static void Aegis_BeginLoop(void);
+		static void BeginLoop(void);
 
-		
+		static void Initialize(int width, int height, std::string title);
 
-		static void Aegis_SetClearColor(glm::vec3 color);
+		static void SetClearColor(glm::vec3 color);
 
-		static void Aegis_AddSystem(BaseSystem* system);
-		BaseSystem* Aegis_GetSystem(std::string name);
+		static void AddSystem(BaseSystem* system);
+		static BaseSystem* GetSystem(std::string name);
 
 		static GLFWwindow* GetWindow();
 
@@ -58,10 +60,16 @@ namespace Aegis {
 		static bool GetKeyReleased(int key);
 		static const glm::vec2* GetMousePosition();
 
-		static void Aegis_Exit(void);
+		static void SetWindowName(std::string name);
+
+		static void Exit(void);
+		static void SetWindowMode(WindowMode mode);
+
+		static void GetWindowDimensions(int* width, int* height);
 
 		friend void inputCallback(GLFWwindow* win, int key, int scancode, int action, int mods);
 		friend void mouseCallback(GLFWwindow* w, double x, double y);
+		
 
 	private:
 		int Aegis_Init();
@@ -71,8 +79,10 @@ namespace Aegis {
 		static std::vector<BaseSystem*>* systems;
 		static glm::vec3* clearColor;
 		static glm::vec2* mousePosition;
-		static AegisSystems* as;
-		static std::map<int, KeyState>* keyStates; // 0
+		static glm::vec2* window_dimensions;
+
+		AegisSystems(unsigned int width, unsigned int height, std::string name);
+		
 	};
 
 	

@@ -4,7 +4,7 @@
 #include "ObjectManager.h"
 
 namespace Aegis {
-	SceneSystem::SceneSystem() : BaseSystem("SceneSystem"), currentScene(nullptr), nextScene(nullptr), isChanging(false)
+	SceneSystem::SceneSystem() : BaseSystem("SceneSystem"), currentScene(nullptr), nextScene(nullptr), isChanging(true)
 	{
 	}
 	SceneSystem::~SceneSystem()
@@ -13,15 +13,19 @@ namespace Aegis {
 	void SceneSystem::Update(float dt)
 	{
 		if (isChanging) {
-			ObjectManager* manager = (ObjectManager*)AegisSystems::GetAegisSystems()->Aegis_GetSystem("ObjectManager");
-			manager->ClearManager();
+			ObjectManager* manager = (ObjectManager*)AegisSystems::GetAegisSystems()->GetSystem("ObjectManager");
+			if (manager)
+				manager->ClearManager();
 			//exit if nextscene is null
 			if (nextScene == nullptr) {
-				currentScene->Exit();
-				currentScene->Unload();
+				if (currentScene) {
+					currentScene->Exit();
+					currentScene->Unload();
+				}
+				
 				delete currentScene;
 				AegisSystems* as = AegisSystems::GetAegisSystems();
-				as->Aegis_Exit();
+				as->Exit();
 				return;
 			}
 			//the scene is restarting if the next scene is the same as the current, dont waste time loading/unloading
@@ -58,5 +62,13 @@ namespace Aegis {
 	void SceneSystem::RestartScene()
 	{
 		SetNextScene(currentScene);
+	}
+	SceneSystem* SceneSystem::GetSceneSystem()
+	{
+		return (SceneSystem*)AegisSystems::GetSystem("SceneSystem");
+	}
+	CameraComponent* SceneSystem::GetActiveCamera() const
+	{
+		return currentScene->camera;
 	}
 }

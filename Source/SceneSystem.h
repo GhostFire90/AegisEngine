@@ -22,6 +22,7 @@
 
 namespace Aegis {
 	class Scene;
+	class CameraComponent;
 	class AEGIS_API SceneSystem : public BaseSystem {
 	public:
 		SceneSystem();
@@ -31,6 +32,9 @@ namespace Aegis {
 		
 		void SetNextScene(Scene* nextScene);
 		void RestartScene();
+
+		static SceneSystem* GetSceneSystem();
+		CameraComponent* GetActiveCamera() const;
 	private:
 		Scene *currentScene, *nextScene;
 		bool isChanging;

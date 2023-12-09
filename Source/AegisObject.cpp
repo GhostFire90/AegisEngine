@@ -52,10 +52,11 @@ namespace Aegis {
 	{
 		return name;
 	}
-	void AegisObject::AddComponent(Component* comp)
+	AegisObject& AegisObject::AddComponent(Component* comp)
 	{
 		comp->SetParent(this);
 		components->push_back(comp);
+		return *this;
 	}
 	Component* AegisObject::GetComponent(const char* _name) const
 	{

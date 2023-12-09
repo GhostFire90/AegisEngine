@@ -20,6 +20,7 @@
 #endif // !AEGIS_DLL_BUILD
 
 namespace Aegis {
+	class CameraComponent;
 	class AEGIS_API Scene {
 	public:
 		Scene();
@@ -32,7 +33,9 @@ namespace Aegis {
 		
 		virtual void Exit() = 0;
 		virtual void Unload() = 0;
+		CameraComponent* camera;
 	protected:
+		
 		glm::vec4* ambientLightColor;
 	};
 }

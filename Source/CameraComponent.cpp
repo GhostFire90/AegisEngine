@@ -9,7 +9,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 namespace Aegis {
-	CameraComponent::CameraComponent() : Component("CameraComponent"), isViewDirty(false), isProjectionDirty(false)
+	CameraComponent::CameraComponent() : Component("CameraComponent"), isViewDirty(true), isProjectionDirty(true)
 	{
 		position = new glm::vec3(0);
 		rotation = new glm::vec3(0);

@@ -34,7 +34,7 @@ namespace Aegis {
 		void AddObject(AegisObject* object);
 
 		void SetActiveCamera(CameraComponent* camera);
-		CameraComponent* GetActiveCamera() const;
+	
 		
 		void ClearManager();
 

@@ -3,6 +3,7 @@
 #include "AegisObject.h"
 #include "CameraComponent.h"
 #include "ObjectManager.h"
+#include "SceneSystem.h"
 #include "Transform.h"
 #include "Shader.h"
 #include "Material.h"
@@ -29,7 +30,7 @@ namespace Aegis {
 	}
 	void MeshRenderer::Render(float dt)
 	{
-		CameraComponent* cam = ObjectManager::GetObjectManager()->GetActiveCamera();
+		CameraComponent* cam = SceneSystem::GetSceneSystem()->GetActiveCamera();
 
 		const glm::mat4& view = cam->GetViewMatrix();
 		const glm::mat4& proj = cam->GetProjectionMatrix();

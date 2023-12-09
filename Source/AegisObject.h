@@ -77,7 +77,7 @@ namespace Aegis {
 		/// Adds a component to the list of components, sets the components parent to this
 		/// </summary>
 		/// <param name="comp">a pointer to the component to add</param>
-		void AddComponent(Component* comp);
+		AegisObject& AddComponent(Component* comp);
 		/// <summary>
 		/// Returns a pointer to a component in the list, can be null
 		/// </summary>
